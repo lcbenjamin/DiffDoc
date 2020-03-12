@@ -1,0 +1,156 @@
+swagger: "2.0"
+info:
+  description: "This service is intended to solve the technical challenge proposed by Cast Group"
+  version: "1.0.0"
+  title: "Diff Doc"
+  contact:
+    email: "lc.benjamin@gmail.com"
+host: "localhost"
+schemes:
+- "https"
+paths:
+  /v1/diff/{ID}/left:
+    put:
+      tags:
+      - "Document diff"
+      summary: "Load the left document"
+      description: ""
+      operationId: "uploadFileLeft"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ID"
+        in: "path"
+        description: "Document ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "documentBase64"
+        in: "body"
+        description: "Base64 encoded document"
+        required: true
+        schema:
+          $ref: "#/definitions/DocRequest"
+      responses:
+        '200':
+          description: "Operação realizada com sucesso"
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: "Bad Request"
+        '401':
+          description: "Unauthorized"
+        '500':
+          description: "Internal Server Error"
+          schema:
+            $ref: '#/definitions/Erro'
+      security:
+        - basicAuth: []
+  /v1/diff/{ID}/right:
+    put:
+      tags:
+      - "Document diff"
+      summary: "Load the right document"
+      description: ""
+      operationId: "uploadFileRight"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ID"
+        in: "path"
+        description: "Document ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "documentBase64"
+        in: "body"
+        description: "Base64 encoded document"
+        required: true
+        schema:
+          $ref: "#/definitions/DocRequest"
+      responses:
+        '200':
+          description: "Sucess"
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: "Bad Request"
+        '401':
+          description: "Unauthorized"
+        '500':
+          description: "Internal Server Error"
+          schema:
+            $ref: '#/definitions/Erro'
+      security:
+        - basicAuth: []
+  /v1/diff/{ID}:
+    get:
+      tags:
+      - "Document diff"
+      summary: "Result of the difference between documents"
+      description: ""
+      operationId: "resultCompare"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ID"
+        in: "path"
+        description: "Document ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        '200':
+          description: "Sucess"
+          schema:
+            $ref: '#/definitions/DocResponse'
+        '400':
+          description: "Bad Request"
+        '401':
+          description: "Unauthorized"
+        '500':
+          description: "Internal Server Error"
+          schema:
+            $ref: '#/definitions/Erro'
+      security:
+        - basicAuth: []
+securityDefinitions:
+  basicAuth:
+    type: "basic"
+definitions:
+  
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+  
+  DocRequest:
+    type: "object"
+    properties:
+      documentBase64:
+        type: "string"
+
+  DocResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      resultMessage:
+        type: "string"
+      difference:
+        type: "string"
+        
+  Erro:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+      message:
+        type: "string"
